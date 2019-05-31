@@ -16,7 +16,7 @@ def get_sample_by_class(class_id, sample_frac):
 
     return sample_files
 
-def update_art_validate(validate_frac=0.3):
+def update_art_validate(validate_frac=0.05):
     if os.path.exists("art_validate"):
         shutil.rmtree("art_validate")
         shutil.rmtree("partial_train")
