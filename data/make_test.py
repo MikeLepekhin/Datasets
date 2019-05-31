@@ -19,14 +19,26 @@ def get_sample_by_class(class_id, sample_frac):
 def update_art_validate(validate_frac=0.3):
     if os.path.exists("art_validate"):
         shutil.rmtree("art_validate")
+        shutil.rmtree("partial_train")
 
     os.mkdir('art_validate')
+    os.mkdir('partial_train')
     for class_id in range(class_num):
         os.mkdir('art_validate/{}'.format(class_id))
-        for file_to_art_validate in get_sample_by_class(class_id, validate_frac):
+        os.mkdir('partial_train/{}'.format(class_id))
+        sample_files = get_sample_by_class(class_id, validate_frac) 
+        
+        for file_to_art_validate in sample_files:
             shutil.copyfile('train/{0}/{1}'.format(class_id, file_to_art_validate),
-                            'art_validate/{0}/{1}'.format(class_id, file_to_art_validate)) 
-#  print(get_sample_by_class(0, 0.3))
+                            'art_validate/{0}/{1}'.format(class_id, file_to_art_validate))
+
+        files_for_partial_train = list(set(get_files_by_class(class_id)) - set(sample_files))
+        for file_to_partial_train in files_for_partial_train:
+            try:
+                shutil.copyfile('train/{0}/{1}'.format(class_id, file_to_partial_train),
+                            'partial_train/{0}/{1}'.format(class_id, file_to_partial_train))
+            except:
+                pass
 
 if __name__ == '__main__':
     update_art_validate()
